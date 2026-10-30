@@ -13,3 +13,47 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 footer{text-align:center;color:#4e596d;font-size:10px;margin-top:30px}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.hero h1{font-size:38px}.values{grid-template-columns:repeat(2,1fr)}.resultTop,.calibration{display:block}.confidence{text-align:left;margin-top:12px}.calBtns{justify-content:flex-start;margin-top:12px}}
 @media(max-width:480px){.app{padding:20px 13px}.values{grid-template-columns:1fr 1fr}.hero h1{font-size:33px}.two{grid-template-columns:1fr}.resultTop h2{font-size:21px}}
+
+@keyframes particleDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-45px,-70px,0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 18px #ff684522,inset 0 0 18px #ff684508}50%{box-shadow:0 0 32px #ff684544,inset 0 0 24px #ff684511}}
+@keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes loadSweep{0%{transform:translateX(-110%)}100%{transform:translateX(220%)}}
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:.72}}
+:root{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 15% 5%,#302018 0,transparent 35%),radial-gradient(ellipse at 85% 30%,#17152c 0,transparent 38%),#07080d;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(1px 1px at 20% 30%,#ff875a88 99%,transparent),radial-gradient(1px 1px at 70% 65%,#a99bff88 99%,transparent),radial-gradient(2px 2px at 40% 80%,#ff604c66 99%,transparent);background-size:180px 180px,240px 240px,320px 320px;animation:particleDrift 22s linear infinite}
+.panel{animation:riseIn .65s ease both;backdrop-filter:blur(14px);transition:border-color .25s,transform .25s}
+.panel:hover{border-color:#4b3540}
+.logo span{color:#ff7958;text-shadow:0 0 20px #ff654b77}
+.badge{border-color:#57352c;background:#1b100f;color:#ff9a78}
+.eyebrow{color:#ff9471}
+.hero h1 i{color:#ff8664;text-shadow:0 0 28px #ff6b4638}
+.generate{background:linear-gradient(100deg,#ff684d,#d84a38);box-shadow:0 8px 28px #f15b3a30;transition:transform .2s,box-shadow .2s}
+.generate:hover{transform:translateY(-2px);box-shadow:0 12px 34px #f15b3a55}
+.seg button.active,.rolegrid button.active,.finger button.active,.weaponModes button.active{background:#b64c37;border-color:#ff886b;color:white}
+.bar i{background:linear-gradient(90deg,#f04f3b,#ffb078)}
+.gamePanel{display:grid;grid-template-columns:.8fr 1.2fr;align-items:center;gap:22px;margin-bottom:16px}
+.gamePanel h2{margin:8px 0 5px}.sectionHint{font-size:12px;color:#8e96a7;margin:0}
+.gameChoices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gameChoice{display:flex;align-items:center;gap:12px;text-align:left;padding:14px;border-radius:13px;border:1px solid #34303a;background:linear-gradient(145deg,#17151b,#0c0d13);transition:all .25s}
+.gameChoice:hover{transform:translateY(-3px);border-color:#a8543e}
+.gameChoice.selected{border-color:#ff7959;background:linear-gradient(145deg,#301a18,#171015);animation:glowPulse 2.8s infinite}
+.gameIcon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#3a201d;color:#ff9a7d;font-size:20px}
+.gameChoice b,.gameChoice small{display:block}.gameChoice b{font-size:13px}.gameChoice small{font-size:10px;color:#9294a0;margin-top:4px}.gameChoice i{margin-left:auto;color:#ff9273;font-style:normal}
+.weaponModes{display:flex;gap:8px}.weaponModes button{border:1px solid #283248;background:#0b0f17;border-radius:9px;padding:10px 12px;font-size:11px}
+.weaponGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.weaponCheck{display:flex!important;align-items:center;gap:8px;margin:0!important;padding:9px;border:1px solid #283248;border-radius:9px;background:#0b0f17;letter-spacing:0!important;font-size:11px!important}
+.weaponCheck input{width:auto}
+.loadingOverlay{position:fixed;inset:0;z-index:50;background:#07080df2;backdrop-filter:blur(18px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;animation:riseIn .25s ease}
+.loaderCore{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;position:relative;margin-bottom:28px;background:radial-gradient(circle,#301b18,#100d13 68%);color:#ff9977;font-weight:900;letter-spacing:2px;box-shadow:0 0 50px #ff694333}
+.loaderRing{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;border-top-color:#ff7959;border-right-color:#ffb078;animation:spin 1.1s linear infinite}
+.loadingTitle{font-size:14px;font-weight:900;letter-spacing:.2em;color:#ff9a7a;animation:flicker 1.5s infinite}
+.loadingOverlay p{font-size:12px;color:#9298a7;margin:12px 0 20px}
+.loadingTrack{width:min(320px,80vw);height:4px;border-radius:9px;background:#28202a;overflow:hidden}
+.loadingTrack i{display:block;width:45%;height:100%;background:linear-gradient(90deg,#ff6548,#ffc08c);animation:loadSweep 1.5s ease-in-out infinite}
+.value{transition:transform .2s,border-color .2s}.value:hover{transform:translateY(-3px);border-color:#a8543e}
+.actions button:hover,.calBtns button:hover{border-color:#ff8664;background:#251614}
+@media(max-width:800px){.gamePanel{grid-template-columns:1fr}.gameChoices{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.gameChoices{grid-template-columns:1fr}.gameChoice{padding:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
