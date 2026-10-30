@@ -267,221 +267,28 @@ function clamp(value, min = 0, max = 200) {
   return Math.max(min, Math.min(max, Math.round(value)));
 }
 
-function hashString(value) {
-  let hash = 2166136261;
-
-  for (let i = 0; i < value.length; i++) {
-    hash ^= value.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-
-  return (hash >>> 0) / 4294967295;
-}
-
-/*
-  These are tuning buckets used by the engine.
-  They are NOT claimed OEM touch measurements.
-*/
-function getBrandBias(brand) {
-  const bias = {
-    POCO: 1.8,
-    Redmi: 1.2,
-    Samsung: -1.2,
-    OnePlus: 0.8,
-    realme: 1.4,
-    iQOO: 2.0,
-    vivo: 0.5,
-    OPPO: 0.2,
-    Motorola: -0.3,
-    Nothing: 0.6,
-    ASUS: 2.3,
-    Infinix: 1.6,
-    Tecno: 1.0,
-    Honor: 0.3,
-    Huawei: 0,
-    Sony: -0.5,
-    Google: -0.2,
-    Apple: -2.0,
-    Custom: 0,
-  };
-
-  return bias[brand] ?? 0;
-}
-
-function getRoleBase(role) {
-  const profiles = {
-    onetap: [184, 174, 158, 138, 92, 132],
-    rush: [194, 184, 170, 150, 98, 140],
-    sniper: [146, 134, 116, 98, 56, 116],
-    hybrid: [176, 166, 150, 130, 82, 130],
-  };
-
-  return [...profiles[role]];
-}
-
-function getWeaponAdjustment(weapon) {
-  const adjustments = {
-    "All weapons": [0, 0, 0, 0, 0, 0],
-
-    "M1887 / Shotgun": [5, 7, 4, 0, -4, 2],
-
-    "Desert Eagle": [3, 5, 3, 0, -2, 2],
-
-    "MP40 / SMG": [6, 5, 3, 1, 0, 2],
-
-    AR: [0, -1, -1, 2, 0, 0],
-
-    "AWM / Sniper": [-5, -3, -7, -8, 4, -3],
-  };
-
-  return adjustments[weapon] || adjustments["All weapons"];
-}
-
-function getFingerAdjustment(fingers) {
-  if (fingers === 2) {
-    return [2, 1, 0, 0, 0, 2];
-  }
-
-  if (fingers === 3) {
-    return [0, 0, 1, 1, 0, 0];
-  }
-
-  return [-3, -2, -2, -1, 0, -2];
-}
-
-function optimizeSensitivity({
-  device,
-  dpi,
-  screen,
-  refresh,
-  role,
-  weapon,
-  fingers,
-  hud,
-  pass,
-  calibration,
-}) {
-  const base = getRoleBase(role);
-
-  const deviceFactor = device
-    ? hashString(device.label)
-    : 0.5;
-
-  const brandAdjustment = device
-    ? getBrandBias(device.brand)
-    : 0;
-
-  const modelAdjustment = (deviceFactor - 0.5) * 8;
-
-  const dpiAdjustment = dpi
-    ? Math.max(-8, Math.min(8, (dpi - 400) / 55))
-    : 0;
-
-  const screenAdjustment = screen
-    ? Math.max(-5, Math.min(5, (screen - 6.0) * 2.2))
-    : 0;
-
-  const refreshAdjustment = refresh
-    ? Math.max(-4, Math.min(5, (refresh - 90) / 18))
-    : 0;
-
-  const hudAdjustment = hud ? 2.2 : 0;
-
-  const optimizationPass = pass * 0.9;
-
-  const weaponAdjustment = getWeaponAdjustment(weapon);
-  const fingerAdjustment = getFingerAdjustment(fingers);
-
-  const result = base.map((value, index) => {
-    const dpiFactor = index < 2 ? 0.9 : 0.45;
-    const screenFactor = index < 2 ? 0.45 : 0.15;
-    const refreshFactor = index === 0 ? 0.55 : 0.25;
-    const hudFactor = index < 3 ? 0.5 : 0.2;
-    const passFactor = index < 3 ? 1 : 0;
-
-    return clamp(
-      value +
-        brandAdjustment +
-        modelAdjustment +
-        dpiAdjustment * dpiFactor -
-        screenAdjustment * screenFactor +
-        refreshAdjustment * refreshFactor +
-        hudAdjustment * hudFactor +
-        weaponAdjustment[index] +
-        fingerAdjustment[index] +
-        optimizationPass * passFactor
-    );
-  });
-
-  if (calibration) {
-    const calibrationAdjustment = {
-      above: {
-        0: -5,
-        1: -7,
-        2: -4,
-      },
-
-      below: {
-        0: 5,
-        1: 7,
-        2: 4,
-      },
-
-      overshoot: {
-        0: -3,
-        1: -5,
-        2: -4,
-        3: -2,
-      },
-
-      slow: {
-        0: 6,
-        1: 7,
-        2: 5,
-        3: 3,
-      },
-
-      good: {
-        0: 0,
-        1: 0,
-        2: 0,
-      },
-    };
-
-    const correction =
-      calibrationAdjustment[calibration] || {};
-
-    Object.entries(correction).forEach(([index, adjustment]) => {
-      result[index] = clamp(
-        result[index] + adjustment
-      );
-    });
-  }
-
-  /*
-    Keep the sensitivity profile internally coherent.
-    General >= Red Dot >= 2x >= 4x.
-  */
-  result[1] = clamp(
-    Math.min(result[1], result[0])
-  );
-
-  result[2] = clamp(
-    Math.min(result[2], result[1] + 2)
-  );
-
-  result[3] = clamp(
-    Math.min(result[3], result[2] + 2)
-  );
-
-  result[4] = clamp(
-    Math.min(
-      result[4],
-      Math.max(40, result[3] - 28)
-    )
-  );
-
-  return result;
+function clamp(value,min=0,max=200){return Math.max(min,Math.min(max,Math.round(value)));}
+const ROLE_CURVES={onetap:[178,168,150,128,78,112],rush:[188,178,158,136,82,122],sniper:[150,138,118,96,58,105],hybrid:[170,158,142,122,76,115]};
+const WEAPON_CURVES={"All weapons":[0,0,0,0,0,0],"M1887 / Shotgun":[5,7,2,-8,-12,0],"Desert Eagle":[0,5,1,-5,-8,0],"MP40 / SMG":[4,3,0,-4,-8,0],AR:[-2,-2,2,4,-2,0],"AWM / Sniper":[-8,-6,-7,-8,8,-4],"Woodpecker":[-2,-2,1,4,-5,0],"SCAR / XM8":[-1,-1,2,3,-2,0],"M4A1 / AK":[-1,-1,2,3,-2,0]};
+function optimizeSensitivity({dpi,screen,resolutionWidth,refresh,fps,touchRate,role,weapon,fingers,fireButton,aimPrecision,calibration}){
+ const ppi=screen&&resolutionWidth?resolutionWidth/screen:null;
+ const density=dpi?Math.max(-2,Math.min(2,(dpi-400)/180)):0;
+ const size=screen?Math.max(-4,Math.min(4,(6.7-screen)*2.1)):0;
+ const pixels=ppi?Math.max(-2,Math.min(2,(ppi-395)/110)):0;
+ const fpsTerm=fps?Math.max(-5,Math.min(5,(fps-60)/12)):0;
+ const touch=touchRate?Math.max(-3,Math.min(3,(touchRate-120)/100)):0;
+ const hz=refresh?Math.max(-1.5,Math.min(1.5,(refresh-90)/60)):0;
+ const wc=WEAPON_CURVES[weapon]||WEAPON_CURVES["All weapons"];
+ const finger=fingers===2?1.5:fingers===4?-1.5:0;
+ const button=fireButton?Math.max(-3,Math.min(3,(fireButton-50)/12)):0;
+ const precision=aimPrecision==="Precise on Scope"?-3:aimPrecision==="Full Control"?2:0;
+ const result=ROLE_CURVES[role].map((base,i)=>{
+  const fast=i<=1?1:i<=3?.45:.15;
+  return clamp(base+wc[i]+(size+density+pixels)*fast+(fpsTerm*.7+touch*.8+hz*.25)*fast+(i<=1?finger:finger*.35)+(i<=1?button:button*.25)+precision*(i<=1?.5:.2));
+ });
+ if(calibration){const idx=calibration.sliderIndex??0;const delta=calibration.outcome==="overshoot"?-4:calibration.outcome==="undershoot"?4:calibration.outcome==="shaky"?-3:calibration.outcome==="slow"?3:0;result[idx]=clamp(result[idx]+delta);}
+ result[2]=Math.min(result[2],result[1]+4);result[3]=Math.min(result[3],result[2]+4);result[4]=Math.min(result[4],result[3]-12);
+ return result.map(v=>clamp(v));
 }
 
 function getConfidence({
@@ -521,6 +328,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [weaponMode, setWeaponMode] = useState("all");
   const [selectedWeapons, setSelectedWeapons] = useState(["M1887 / Shotgun", "Desert Eagle", "MP40 / SMG", "AR", "AWM / Sniper"]);
+  const [fps,setFps]=useState("60"); const [touchRate,setTouchRate]=useState("180"); const [resolutionWidth,setResolutionWidth]=useState("1080"); const [fireButton,setFireButton]=useState("50"); const [aimPrecision,setAimPrecision]=useState("Default"); const [testSlider,setTestSlider]=useState("General");
   const [searchQuery, setSearchQuery] = useState("");
   const [device, setDevice] = useState(null);
   const [customDevice, setCustomDevice] = useState("");
@@ -579,19 +387,11 @@ function App() {
       parseInt(refreshRate, 10) || 90;
 
     const generated = optimizeSensitivity({
-      device: selectedDevice,
-      dpi: Number(dpi) || null,
-      screen: Number(screenSize) || null,
-      refresh: refreshNumber,
-      role,
-      weapon,
-      fingers,
-      hud: hudFile,
-      pass: optimizationPass,
-      calibration:
-        nextCalibration !== null
-          ? nextCalibration
-          : calibration,
+      dpi:Number(dpi)||null, screen:Number(screenSize)||null,
+      resolutionWidth:Number(resolutionWidth)||null, refresh:refreshNumber,
+      fps:Number(fps)||null, touchRate:Number(touchRate)||null,
+      role,weapon,fingers,fireButton:Number(fireButton)||null,aimPrecision,
+      calibration:nextCalibration?{sliderIndex:resultKeys.indexOf(testSlider),outcome:nextCalibration}:null
     });
 
     setResult(generated);
@@ -622,18 +422,7 @@ function App() {
 
       const nextPass = optimizationPass + 1;
 
-      const generated = optimizeSensitivity({
-        device: selectedDevice,
-        dpi: Number(dpi) || null,
-        screen: Number(screenSize) || null,
-        refresh: refreshNumber,
-        role,
-        weapon,
-        fingers,
-        hud: hudFile,
-        pass: nextPass,
-        calibration,
-      });
+      const generated = optimizeSensitivity({dpi:Number(dpi)||null,screen:Number(screenSize)||null,resolutionWidth:Number(resolutionWidth)||null,refresh:refreshNumber,fps:Number(fps)||null,touchRate:Number(touchRate)||null,role,weapon,fingers,fireButton:Number(fireButton)||null,aimPrecision,calibration:null});
 
       setResult(generated);
     }, 0);
@@ -857,10 +646,13 @@ function App() {
 
               <div>
                 <label>SCREEN RESOLUTION <small>optional</small></label>
-                <input placeholder="e.g. 1640 × 720" />
+                <input value={resolutionWidth} onChange={(e)=>setResolutionWidth(e.target.value.replace(/\\D/g,""))} placeholder="e.g. 1080" />
               </div>
             </div>
 
+            <div className="two"><div><label>ACTUAL GAME FPS</label><select value={fps} onChange={e=>setFps(e.target.value)}><option value="30">30 FPS</option><option value="40">40 FPS</option><option value="60">Stable 60 FPS</option><option value="90">Stable 90 FPS</option><option value="120">Stable 120 FPS</option><option value="0">Unstable / unknown</option></select></div><div><label>TOUCH SAMPLING RATE</label><select value={touchRate} onChange={e=>setTouchRate(e.target.value)}><option value="60">60 Hz</option><option value="120">120 Hz</option><option value="180">180 Hz</option><option value="240">240 Hz</option><option value="360">360 Hz</option><option value="0">Unknown</option></select></div></div>
+            <label>FIRE BUTTON SIZE (%)</label><input value={fireButton} onChange={e=>setFireButton(e.target.value.replace(/\\D/g,""))}/>
+            <label>AIM PRECISION</label><select value={aimPrecision} onChange={e=>setAimPrecision(e.target.value)}><option>Default</option><option>Precise on Scope</option><option>Full Control</option></select>
             <label>
               REFRESH RATE
             </label>
@@ -1100,11 +892,11 @@ function App() {
                 </p>
               </div>
 
-              <div className="calBtns">
+              <div className="calBtns"><label>TEST SLIDER<select value={testSlider} onChange={e=>setTestSlider(e.target.value)}>{resultKeys.map(k=><option key={k}>{k}</option>)}</select></label>
                 <button
                   type="button"
                   onClick={() =>
-                    generateSensitivity("above")
+                    generateSensitivity("overshoot")
                   }
                 >
                   Went above head
@@ -1113,7 +905,7 @@ function App() {
                 <button
                   type="button"
                   onClick={() =>
-                    generateSensitivity("below")
+                    generateSensitivity("undershoot")
                   }
                 >
                   Stopped below head
