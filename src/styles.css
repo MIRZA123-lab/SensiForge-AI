@@ -269,3 +269,66 @@ body:after{
   100%{background-position:-80px -220px,110px -180px,-90px -260px,140px -200px,-120px -230px,80px -190px}
 }
 @media(prefers-reduced-motion:reduce){body:before,body:after{animation:none!important}}
+
+
+/* Bright, soothing drifting galaxy — luminous blue / violet / aqua */
+html{background:#b8c9ff}
+body{
+  background:
+    radial-gradient(ellipse at 14% 18%,rgba(103,174,255,.92),transparent 34%),
+    radial-gradient(ellipse at 83% 14%,rgba(190,145,255,.88),transparent 32%),
+    radial-gradient(ellipse at 70% 78%,rgba(87,222,224,.7),transparent 34%),
+    radial-gradient(ellipse at 20% 85%,rgba(174,157,255,.72),transparent 36%),
+    linear-gradient(135deg,#172d72 0%,#344e9d 35%,#496bb0 62%,#245e83 100%);
+  color:#f8faff;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.95;
+  background:
+    radial-gradient(ellipse at 20% 30%,rgba(99,190,255,.72),transparent 24%),
+    radial-gradient(ellipse at 68% 26%,rgba(198,142,255,.68),transparent 25%),
+    radial-gradient(ellipse at 56% 70%,rgba(74,229,220,.46),transparent 26%),
+    radial-gradient(ellipse at 83% 80%,rgba(140,164,255,.58),transparent 22%),
+    conic-gradient(from 210deg at 50% 50%,transparent 0 18%,rgba(180,205,255,.12) 24%,transparent 33% 55%,rgba(123,229,255,.1) 64%,transparent 76%);
+  filter:blur(38px) saturate(1.18);
+  animation:brightGalaxyDrift 30s ease-in-out infinite alternate;
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.7;
+  background-image:
+    radial-gradient(2px 2px at 7% 18%,rgba(255,255,255,.98) 98%,transparent),
+    radial-gradient(1px 1px at 22% 73%,rgba(218,240,255,.95) 98%,transparent),
+    radial-gradient(2px 2px at 41% 39%,rgba(255,255,255,.9) 98%,transparent),
+    radial-gradient(1px 1px at 59% 82%,rgba(211,228,255,.95) 98%,transparent),
+    radial-gradient(2px 2px at 77% 24%,rgba(255,255,255,.95) 98%,transparent),
+    radial-gradient(1px 1px at 91% 61%,rgba(221,251,255,.95) 98%,transparent);
+  background-size:290px 270px,350px 320px,410px 370px,330px 390px,370px 340px,440px 400px;
+  animation:brightStarDrift 42s linear infinite;
+}
+.app{position:relative;z-index:1}
+.panel,.gameChoice,.result{
+  background:linear-gradient(145deg,rgba(25,39,83,.82),rgba(20,35,73,.76));
+  border-color:rgba(190,213,255,.28);
+  backdrop-filter:blur(18px);
+  box-shadow:0 18px 55px rgba(8,20,64,.22),inset 0 1px 0 rgba(255,255,255,.12);
+}
+@keyframes brightGalaxyDrift{
+  0%{transform:translate3d(-3%,1%,0) rotate(-5deg) scale(1)}
+  50%{transform:translate3d(2%,-3%,0) rotate(3deg) scale(1.1)}
+  100%{transform:translate3d(4%,2%,0) rotate(7deg) scale(1.04)}
+}
+@keyframes brightStarDrift{
+  0%{background-position:0 0,0 0,0 0,0 0,0 0,0 0}
+  100%{background-position:-90px -170px,130px -210px,-110px -190px,150px -230px,-120px -180px,100px -220px}
+}
+@media(prefers-reduced-motion:reduce){body:before,body:after{animation:none!important}}
