@@ -536,6 +536,14 @@ function App() {
       <main>
         <section className="hero">
           <div>
+            <div className="welcomeAnime" aria-label="Welcome to SensiForge">
+              <div className="welcomeLetters">
+                {Array.from("WELCOME").map((letter, index) => (
+                  <span key={index} style={{ "--letter-index": index }}>{letter}</span>
+                ))}
+              </div>
+              <span className="welcomeSubline">THE FORGE IS READY</span>
+            </div>
             <span className="eyebrow">
               PERSONALIZED CONTROL ENGINE
             </span>
