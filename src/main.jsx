@@ -996,35 +996,61 @@ function App() {
             <div className="duelMountain duelMountainFront" />
             <div className="duelGround" />
             <div className="duelDust dustOne" /><div className="duelDust dustTwo" />
-            <svg className="duelFighter fighterLeft" viewBox="0 0 260 330">
-              <defs><linearGradient id="robeA" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#f1eee7"/><stop offset="1" stopColor="#77736d"/></linearGradient></defs>
-              <g stroke="#111" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M103 111 Q75 139 78 192 L53 258 Q93 281 143 260 L157 194 Q161 145 133 111Z" fill="url(#robeA)"/>
-                <path d="M91 133 L54 174 L30 217 M143 133 L179 157 L220 125" fill="none"/>
-                <path d="M79 252 L61 300 M140 255 L164 301" fill="none" strokeWidth="15"/>
-                <path d="M84 45 Q89 9 128 16 Q170 21 166 65 L146 104 L95 91Z" fill="#151515"/>
-                <path d="M91 70 Q124 58 157 73 L151 94 Q122 105 96 89Z" fill="#d6d0c4"/>
-                <path d="M99 110 L146 111" fill="none" stroke="#111" strokeWidth="5"/>
-                <path d="M181 157 L235 83" fill="none" stroke="#d9d5ce" strokeWidth="7"/>
-                <path d="M172 168 L190 145" fill="none" stroke="#111" strokeWidth="12"/>
-                <path d="M53 258 L35 275 M143 260 L160 278" fill="none" strokeWidth="10"/>
+            <svg className="duelFighter fighterLeft" viewBox="0 0 260 360">
+              <defs>
+                <linearGradient id="warriorIvory" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#e8e2d7"/><stop offset=".48" stopColor="#8f8a82"/><stop offset="1" stopColor="#27272b"/></linearGradient>
+                <linearGradient id="warriorSteel" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#f4eee4"/><stop offset="1" stopColor="#4b4a4b"/></linearGradient>
+              </defs>
+              <g stroke="#09090b" strokeWidth="5" strokeLinejoin="round" strokeLinecap="round">
+                <path d="M104 104 Q76 112 67 151 L48 224 Q76 250 142 241 L166 164 Q165 119 137 105Z" fill="url(#warriorIvory)"/>
+                <path d="M91 119 L116 143 L143 115 L157 159 L133 188 L79 178 L67 148Z" fill="#25252a"/>
+                <path d="M113 140 L137 157 L125 199 L95 184Z" fill="url(#warriorSteel)"/>
+                <path d="M72 150 Q44 157 39 190 L22 224 Q36 238 53 224 L82 185" fill="#b7b0a4"/>
+                <path d="M151 139 Q180 131 190 155 L222 111 L237 122 L208 184 Q191 199 166 176" fill="#d2cabe"/>
+                <path d="M78 211 L59 274 L43 315 L64 322 L100 267 L119 225" fill="#3a393b"/>
+                <path d="M120 229 L137 274 L160 311 L180 303 L158 250 L160 220" fill="#77716b"/>
+                <path d="M42 314 L24 330 L68 332 L76 322 M158 310 L151 331 L194 329 L180 302" fill="#151518"/>
+                <path d="M87 57 Q85 20 123 17 Q163 20 166 59 L151 101 L102 107Z" fill="#101013"/>
+                <path d="M91 65 Q123 48 158 66 L151 88 Q122 101 96 87Z" fill="#c9c2b7"/>
+                <path d="M103 74 L116 71 M136 71 L149 75" stroke="#151518" strokeWidth="5"/>
+                <path d="M91 48 Q54 40 58 17 Q83 31 112 22 Q149 5 174 30 L160 48 Q124 35 91 48Z" fill="#17171b"/>
+                <path d="M105 105 L141 109 L151 127 L126 143 L91 124Z" fill="#555158"/>
+                <path d="M194 153 L245 65" stroke="#d8d4cd" strokeWidth="7"/>
+                <path d="M186 162 L203 137" stroke="#242328" strokeWidth="12"/>
+                <path d="M193 151 L245 65" stroke="#fff" strokeWidth="2"/>
+                <path d="M68 165 L93 188 M151 159 L166 180 M81 226 L139 236" fill="none" stroke="#e8e1d7" strokeWidth="3"/>
+                <path d="M59 272 L94 278 M133 273 L161 265" fill="none" stroke="#17171a" strokeWidth="8"/>
               </g>
-              <path d="M100 105 Q59 116 28 94 Q60 103 84 85Z" fill="#171717"/>
+              <path d="M88 99 Q48 118 18 91 Q54 99 76 75Z" fill="#151519"/>
+              <path d="M145 101 Q178 112 197 94 Q176 127 150 121Z" fill="#252329"/>
             </svg>
-            <svg className="duelFighter fighterRight" viewBox="0 0 260 330">
-              <defs><linearGradient id="robeB" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#292a30"/><stop offset="1" stopColor="#050506"/></linearGradient></defs>
-              <g stroke="#050505" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M104 111 Q75 139 78 192 L53 258 Q93 281 143 260 L157 194 Q161 145 133 111Z" fill="url(#robeB)"/>
-                <path d="M91 133 L54 174 L30 217 M143 133 L179 157 L220 125" fill="none"/>
-                <path d="M79 252 L61 300 M140 255 L164 301" fill="none" strokeWidth="15"/>
-                <path d="M84 45 Q89 9 128 16 Q170 21 166 65 L146 104 L95 91Z" fill="#080809"/>
-                <path d="M91 70 Q124 58 157 73 L151 94 Q122 105 96 89Z" fill="#b7b4ad"/>
-                <path d="M99 110 L146 111" fill="none" stroke="#111" strokeWidth="5"/>
-                <path d="M181 157 L235 83" fill="none" stroke="#e9e3d9" strokeWidth="7"/>
-                <path d="M172 168 L190 145" fill="none" stroke="#111" strokeWidth="12"/>
-                <path d="M53 258 L35 275 M143 260 L160 278" fill="none" strokeWidth="10"/>
+            <svg className="duelFighter fighterRight" viewBox="0 0 260 360">
+              <defs>
+                <linearGradient id="warriorObsidian" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#55545b"/><stop offset=".38" stopColor="#17171d"/><stop offset="1" stopColor="#030305"/></linearGradient>
+                <linearGradient id="warriorRed" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#9b2630"/><stop offset="1" stopColor="#26070d"/></linearGradient>
+              </defs>
+              <g stroke="#030305" strokeWidth="5" strokeLinejoin="round" strokeLinecap="round">
+                <path d="M104 104 Q76 112 67 151 L48 224 Q76 250 142 241 L166 164 Q165 119 137 105Z" fill="url(#warriorObsidian)"/>
+                <path d="M91 119 L116 143 L143 115 L157 159 L133 188 L79 178 L67 148Z" fill="#08080c"/>
+                <path d="M113 140 L137 157 L125 199 L95 184Z" fill="#292930"/>
+                <path d="M72 150 Q44 157 39 190 L22 224 Q36 238 53 224 L82 185" fill="#222229"/>
+                <path d="M151 139 Q180 131 190 155 L222 111 L237 122 L208 184 Q191 199 166 176" fill="#33323a"/>
+                <path d="M78 211 L59 274 L43 315 L64 322 L100 267 L119 225" fill="#15151b"/>
+                <path d="M120 229 L137 274 L160 311 L180 303 L158 250 L160 220" fill="#28272e"/>
+                <path d="M42 314 L24 330 L68 332 L76 322 M158 310 L151 331 L194 329 L180 302" fill="#050507"/>
+                <path d="M87 57 Q85 20 123 17 Q163 20 166 59 L151 101 L102 107Z" fill="#050508"/>
+                <path d="M91 65 Q123 48 158 66 L151 88 Q122 101 96 87Z" fill="#77737a"/>
+                <path d="M103 74 L116 71 M136 71 L149 75" stroke="#09090c" strokeWidth="5"/>
+                <path d="M91 48 Q54 40 58 17 Q83 31 112 22 Q149 5 174 30 L160 48 Q124 35 91 48Z" fill="#09090d"/>
+                <path d="M105 105 L141 109 L151 127 L126 143 L91 124Z" fill="url(#warriorRed)"/>
+                <path d="M194 153 L245 65" stroke="#e5e0d8" strokeWidth="7"/>
+                <path d="M186 162 L203 137" stroke="#101015" strokeWidth="12"/>
+                <path d="M193 151 L245 65" stroke="#fff" strokeWidth="2"/>
+                <path d="M68 165 L93 188 M151 159 L166 180 M81 226 L139 236" fill="none" stroke="#a43a43" strokeWidth="3"/>
+                <path d="M59 272 L94 278 M133 273 L161 265" fill="none" stroke="#050508" strokeWidth="8"/>
               </g>
-              <path d="M100 105 Q59 116 28 94 Q60 103 84 85Z" fill="#09090a"/>
+              <path d="M88 99 Q48 118 18 91 Q54 99 76 75Z" fill="#060609"/>
+              <path d="M145 101 Q178 112 197 94 Q176 127 150 121Z" fill="#15151b"/>
             </svg>
             <svg className="duelEffects" viewBox="0 0 900 440">
               <path className="duelSlash slashRed" d="M360 178 Q450 70 548 175"/>
