@@ -978,12 +978,44 @@ function App() {
         )}
       </main>
 
+      {introReady && showNinjaIntro && (
+        <div className="ninjaIntro" role="dialog" aria-modal="true" aria-label="SensiForge entrance animation">
+          <div className="introGrain" />
+          <div className="introKicker">SENSIFORGE // SHADOW PROTOCOL</div>
+          <div className="ninjaStage">
+            <div className="slashTrail" />
+            <svg className="stickNinja" viewBox="0 0 220 240" aria-hidden="true">
+              <g className="ninjaBody" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
+                <path d="M105 72 L104 139 M103 88 L61 119 L42 105 M107 88 L148 106 L172 77 M104 139 L72 188 L54 220 M106 139 L137 183 L163 213"/>
+              </g>
+              <g className="ninjaSword" fill="none" strokeLinecap="round"><path d="M173 75 L210 8" stroke="currentColor" strokeWidth="4"/><path d="M167 83 L181 68" stroke="currentColor" strokeWidth="7"/></g>
+              <path className="ninjaScarf" d="M83 68 Q48 66 24 82 Q49 78 70 91Z" fill="currentColor"/>
+            </svg>
+            <div className="impactRing" /><div className="introSlash">SHINK!</div>
+          </div>
+          <div className="introWordmark">NO PRESETS. <span>PURE CONTROL.</span></div>
+          <p className="introSub">A new challenger enters the forge.</p>
+          <button className="enterForge" type="button" onClick={dismissNinjaIntro}>ENTER THE FORGE <span>↗</span></button>
+          <div className="introFooter">SENSIFORGE AI <i>•</i> FREE FIRE SENSITIVITY LAB</div>
+        </div>
+      )}
       {loading && (
         <div className="loadingOverlay" role="status" aria-live="polite">
-          <div className="loaderCore"><div className="loaderRing"></div><span>SF</span></div>
+          <div className="loadingNinjaStage">
+            <div className="loadingSlash" />
+            <svg className="loadingNinja" viewBox="0 0 220 240" aria-hidden="true">
+              <g fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
+                <path d="M105 72 L104 139 M103 88 L61 119 L42 105 M107 88 L148 106 L172 77 M104 139 L72 188 L54 220 M106 139 L137 183 L163 213 M173 75 L210 8"/>
+              </g>
+            </svg>
+            <div className="loadingImpact" />
+          </div>
           <div className="loadingTitle">FORGING YOUR PROFILE</div>
-          <p>Analyzing device · Tuning control curves · Preparing settings</p>
+          <p>{["Reading device geometry","Mapping touch response","Tuning weapon control curves","Finalizing sensitivity profile"][Math.min(3,loadingStep)]}</p>
           <div className="loadingTrack"><i /></div>
+          <div className="loadingMicro">SENSIFORGE // LIVE CALCULATION</div>
         </div>
       )}
       <footer>
