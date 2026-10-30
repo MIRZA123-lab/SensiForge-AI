@@ -267,7 +267,6 @@ function clamp(value, min = 0, max = 200) {
   return Math.max(min, Math.min(max, Math.round(value)));
 }
 
-function clamp(value,min=0,max=200){return Math.max(min,Math.min(max,Math.round(value)));}
 const ROLE_CURVES={onetap:[178,168,150,128,78,112],rush:[188,178,158,136,82,122],sniper:[150,138,118,96,58,105],hybrid:[170,158,142,122,76,115]};
 const WEAPON_CURVES={"All weapons":[0,0,0,0,0,0],"M1887 / Shotgun":[5,7,2,-8,-12,0],"Desert Eagle":[0,5,1,-5,-8,0],"MP40 / SMG":[4,3,0,-4,-8,0],AR:[-2,-2,2,4,-2,0],"AWM / Sniper":[-8,-6,-7,-8,8,-4],"Woodpecker":[-2,-2,1,4,-5,0],"SCAR / XM8":[-1,-1,2,3,-2,0],"M4A1 / AK":[-1,-1,2,3,-2,0]};
 function optimizeSensitivity({dpi,screen,resolutionWidth,refresh,fps,touchRate,role,weapon,fingers,fireButton,aimPrecision,calibration}){
