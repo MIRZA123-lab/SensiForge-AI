@@ -204,3 +204,11 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 @keyframes welcomeSubIn{from{opacity:0;transform:translateX(-18px);letter-spacing:.8em}to{opacity:1;transform:translateX(0);letter-spacing:.48em}}
 @keyframes welcomeLine{to{transform:scaleX(1)}}
 @media(prefers-reduced-motion:reduce){.welcomeLetters span,.welcomeSubline,.welcomeAnime:after{animation:none!important;opacity:1;transform:none}}
+
+/* Detailed fighting-game shadow warriors */
+.duelFighter{height:88%;width:clamp(150px,29vw,285px);bottom:5%;filter:drop-shadow(0 12px 9px #000c) drop-shadow(0 0 13px #d8d0c455);transform-origin:50% 88%}
+.fighterLeft{left:10%}
+.fighterRight{right:8%;filter:drop-shadow(0 12px 10px #000e) drop-shadow(0 0 16px #a7192a66)}
+.duelScene{background:linear-gradient(180deg,#55566b 0%,#343746 48%,#111319 100%);border-color:#aaa4a044}
+.duelMoon{background:radial-gradient(circle at 35% 30%,#d5a0a0,#a52c3c 65%,#4b101b);box-shadow:0 0 58px #c51d3d66}
+@media(max-width:520px){.duelFighter{width:52%;height:82%;bottom:5%}.fighterLeft{left:-2%}.fighterRight{right:-2%}}
