@@ -57,3 +57,8 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 @media(max-width:800px){.gamePanel{grid-template-columns:1fr}.gameChoices{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.gameChoices{grid-template-columns:1fr}.gameChoice{padding:12px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
+
+.panel select,.panel input{max-width:100%}
+.calBtns label{display:flex;flex-direction:column;gap:5px;color:#ff9a7a;font-size:10px}
+.calBtns select{min-width:130px;padding:8px;font-size:11px}
+.gamePanel{border-color:#55372e}
