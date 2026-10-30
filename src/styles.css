@@ -102,3 +102,19 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 @keyframes liveSlash{0%{transform:translate(-150px,60px) rotate(-25deg);opacity:0}30%{opacity:1}100%{transform:translate(150px,-60px) rotate(-25deg);opacity:0}}
 @keyframes liveProgress{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
 @media(prefers-reduced-motion:reduce){.stickNinja,.ninjaBody,.ninjaSword,.ninjaScarf,.slashTrail,.impactRing,.introSlash,.loadingNinja,.loadingSlash,.loadingImpact,.loadingTrack i{animation:none!important}}
+
+/* Ink-and-steel cinematic scene, based on the supplied reference */
+.ninjaStage,.loadingNinjaStage{isolation:isolate}
+.inkLandscape{position:absolute;z-index:-1;width:min(520px,118vw);height:auto;max-height:290px;object-fit:cover;opacity:.76;filter:grayscale(.82) contrast(1.18);mask-image:linear-gradient(to bottom,black 0%,black 72%,transparent 100%);animation:inkReveal 1.5s ease both}
+.ninjaStage .stickNinja{z-index:2;filter:drop-shadow(0 5px 8px #000) drop-shadow(0 0 10px #fff5)}
+.loadingNinjaStage .inkLandscape{width:360px;max-height:210px;opacity:.58}
+.loadingNinjaStage .loadingNinja{z-index:2;width:150px;height:170px;filter:drop-shadow(0 5px 8px #000)}
+.ninjaIntro{background:radial-gradient(ellipse at 50% 43%,#3a2928 0%,#101012 42%,#030303 78%)}
+.loadingOverlay{background:radial-gradient(ellipse at 50% 43%,#2c2020 0%,#090909 55%,#020202 100%)}
+.introKicker,.introFooter,.loadingMicro{color:#aaa}
+.introWordmark span{color:#e42c32;text-shadow:0 0 18px #e42c3266}
+.enterForge{background:#e6e3df;border-color:#e6e3df}
+.loadingOverlay .loadingTitle{color:#f2e9e7}
+.loadingTrack i{background:linear-gradient(90deg,#eee,#c91f2a,#eee);box-shadow:0 0 16px #d32a3288}
+@keyframes inkReveal{0%{opacity:0;transform:scale(1.12);filter:grayscale(1) blur(7px)}100%{opacity:.76;transform:scale(1);filter:grayscale(.82) contrast(1.18)}}
+@media(prefers-reduced-motion:reduce){.inkLandscape{animation:none!important}}
