@@ -269,25 +269,47 @@ function clamp(value, min = 0, max = 200) {
 
 const ROLE_CURVES={onetap:[178,168,150,128,78,112],rush:[188,178,158,136,82,122],sniper:[150,138,118,96,58,105],hybrid:[170,158,142,122,76,115]};
 const WEAPON_CURVES={"All weapons":[0,0,0,0,0,0],"M1887 / Shotgun":[5,7,2,-8,-12,0],"Desert Eagle":[0,5,1,-5,-8,0],"MP40 / SMG":[4,3,0,-4,-8,0],AR:[-2,-2,2,4,-2,0],"AWM / Sniper":[-8,-6,-7,-8,8,-4],"Woodpecker":[-2,-2,1,4,-5,0],"SCAR / XM8":[-1,-1,2,3,-2,0],"M4A1 / AK":[-1,-1,2,3,-2,0]};
-function optimizeSensitivity({dpi,screen,resolutionWidth,refresh,fps,touchRate,role,weapon,fingers,fireButton,aimPrecision,calibration}){
- const ppi=screen&&resolutionWidth?resolutionWidth/screen:null;
- const density=dpi?Math.max(-2,Math.min(2,(dpi-400)/180)):0;
- const size=screen?Math.max(-4,Math.min(4,(6.7-screen)*2.1)):0;
- const pixels=ppi?Math.max(-2,Math.min(2,(ppi-395)/110)):0;
- const fpsTerm=fps?Math.max(-5,Math.min(5,(fps-60)/12)):0;
- const touch=touchRate?Math.max(-3,Math.min(3,(touchRate-120)/100)):0;
- const hz=refresh?Math.max(-1.5,Math.min(1.5,(refresh-90)/60)):0;
- const wc=WEAPON_CURVES[weapon]||WEAPON_CURVES["All weapons"];
- const finger=fingers===2?1.5:fingers===4?-1.5:0;
- const button=fireButton?Math.max(-3,Math.min(3,(fireButton-50)/12)):0;
- const precision=aimPrecision==="Precise on Scope"?-3:aimPrecision==="Full Control"?2:0;
- const result=ROLE_CURVES[role].map((base,i)=>{
-  const fast=i<=1?1:i<=3?.45:.15;
-  return clamp(base+wc[i]+(size+density+pixels)*fast+(fpsTerm*.7+touch*.8+hz*.25)*fast+(i<=1?finger:finger*.35)+(i<=1?button:button*.25)+precision*(i<=1?.5:.2));
- });
- if(calibration){const idx=calibration.sliderIndex??0;const delta=calibration.outcome==="overshoot"?-4:calibration.outcome==="undershoot"?4:calibration.outcome==="shaky"?-3:calibration.outcome==="slow"?3:0;result[idx]=clamp(result[idx]+delta);}
- result[2]=Math.min(result[2],result[1]+4);result[3]=Math.min(result[3],result[2]+4);result[4]=Math.min(result[4],result[3]-12);
- return result.map(v=>clamp(v));
+function optimizeSensitivity({dpi,screen,resolutionWidth,resolutionHeight,refresh,fps,touchRate,role,weapon,fingers,fireButton,aimPrecision,calibration}) {
+  // Six global in-game sliders. Hardware terms are deliberately bounded:
+  // they tune the starting point, while training-ground feedback remains decisive.
+  const diagonalPixels = resolutionWidth && resolutionHeight
+    ? Math.hypot(resolutionWidth, resolutionHeight) : null;
+  const ppi = diagonalPixels && screen ? diagonalPixels / screen : null;
+  const densityTerm = dpi ? Math.max(-2, Math.min(2, (dpi - 420) / 100)) : 0;
+  const sizeTerm = screen ? Math.max(-3, Math.min(3, (6.8 - screen) * 1.35)) : 0;
+  const ppiTerm = ppi ? Math.max(-2.5, Math.min(2.5, (ppi - 350) / 75)) : 0;
+  const fpsTerm = fps ? Math.max(-4, Math.min(4, (fps - 60) / 15)) : 0;
+  const touchTerm = touchRate ? Math.max(-3, Math.min(3, (touchRate - 120) / 80)) : 0;
+  const refreshTerm = refresh ? Math.max(-2, Math.min(2, (refresh - 60) / 45)) : 0;
+  const curve = WEAPON_CURVES[weapon] || WEAPON_CURVES["All weapons"];
+  const gripTerm = fingers === 2 ? 1.5 : fingers === 3 ? 0.5 : -1;
+  const buttonTerm = fireButton ? Math.max(-2.5, Math.min(2.5, (fireButton - 50) / 10)) : 0;
+  const precisionTerm = aimPrecision === "Precise on Scope" ? -3 : aimPrecision === "Full Control" ? 2 : 0;
+  const roleCurve = ROLE_CURVES[role] || ROLE_CURVES.hybrid;
+
+  const output = roleCurve.map((base, index) => {
+    const cameraWeight = index < 2 ? 1 : index < 4 ? 0.65 : 0.35;
+    const displayAdjustment = (sizeTerm * 0.9 + ppiTerm * 0.55 + densityTerm * 0.3) * cameraWeight;
+    const responseAdjustment = (fpsTerm * 0.65 + touchTerm * 0.65 + refreshTerm * 0.35) * cameraWeight;
+    const gripAdjustment = gripTerm * (index < 2 ? 1 : 0.3);
+    const buttonAdjustment = buttonTerm * (index < 2 ? 0.8 : 0.2);
+    const precisionAdjustment = precisionTerm * (index < 2 ? 0.65 : 0.35);
+    return clamp(base + curve[index] + displayAdjustment + responseAdjustment +
+      gripAdjustment + buttonAdjustment + precisionAdjustment);
+  });
+
+  if (calibration) {
+    const index = calibration.sliderIndex ?? 0;
+    const correction = calibration.outcome === "overshoot" ? -5 :
+      calibration.outcome === "undershoot" ? 5 :
+      calibration.outcome === "shaky" ? -4 :
+      calibration.outcome === "slow" ? 4 : 0;
+    output[index] = clamp(output[index] + correction);
+  }
+  output[2] = Math.min(output[2], output[1] + 4);
+  output[3] = Math.min(output[3], output[2] + 4);
+  output[4] = Math.min(output[4], output[3] - 12);
+  return output.map(value => clamp(value));
 }
 
 function getConfidence({
@@ -352,7 +374,7 @@ function App() {
   }
   const [weaponMode, setWeaponMode] = useState("all");
   const [selectedWeapons, setSelectedWeapons] = useState(["M1887 / Shotgun", "Desert Eagle", "MP40 / SMG", "AR", "AWM / Sniper"]);
-  const [fps,setFps]=useState("60"); const [touchRate,setTouchRate]=useState("180"); const [resolutionWidth,setResolutionWidth]=useState("1080"); const [fireButton,setFireButton]=useState("50"); const [aimPrecision,setAimPrecision]=useState("Default"); const [testSlider,setTestSlider]=useState("General");
+  const [fps,setFps]=useState("60"); const [touchRate,setTouchRate]=useState(""); const [resolutionWidth,setResolutionWidth]=useState("1080"); const [resolutionHeight,setResolutionHeight]=useState(""); const [fireButton,setFireButton]=useState("50"); const [aimPrecision,setAimPrecision]=useState("Default"); const [testSlider,setTestSlider]=useState("General");
   const [searchQuery, setSearchQuery] = useState("");
   const [device, setDevice] = useState(null);
   const [customDevice, setCustomDevice] = useState("");
@@ -412,7 +434,7 @@ function App() {
 
     const generated = optimizeSensitivity({
       dpi:Number(dpi)||null, screen:Number(screenSize)||null,
-      resolutionWidth:Number(resolutionWidth)||null, refresh:refreshNumber,
+      resolutionWidth:Number(resolutionWidth)||null, resolutionHeight:Number(resolutionHeight)||null, refresh:refreshNumber,
       fps:Number(fps)||null, touchRate:Number(touchRate)||null,
       role,weapon,fingers,fireButton:Number(fireButton)||null,aimPrecision,
       calibration:nextCalibration?{sliderIndex:resultKeys.indexOf(testSlider),outcome:nextCalibration}:null
@@ -446,7 +468,7 @@ function App() {
 
       const nextPass = optimizationPass + 1;
 
-      const generated = optimizeSensitivity({dpi:Number(dpi)||null,screen:Number(screenSize)||null,resolutionWidth:Number(resolutionWidth)||null,refresh:refreshNumber,fps:Number(fps)||null,touchRate:Number(touchRate)||null,role,weapon,fingers,fireButton:Number(fireButton)||null,aimPrecision,calibration:null});
+      const generated = optimizeSensitivity({dpi:Number(dpi)||null,screen:Number(screenSize)||null,resolutionWidth:Number(resolutionWidth)||null,resolutionHeight:Number(resolutionHeight)||null,refresh:refreshNumber,fps:Number(fps)||null,touchRate:Number(touchRate)||null,role,weapon,fingers,fireButton:Number(fireButton)||null,aimPrecision,calibration:null});
 
       setResult(generated);
     }, 0);
@@ -670,12 +692,12 @@ function App() {
 
               <div>
                 <label>SCREEN RESOLUTION <small>optional</small></label>
-                <input value={resolutionWidth} onChange={(e)=>setResolutionWidth(e.target.value.replace(/\\D/g,""))} placeholder="e.g. 1080" />
+                <input value={resolutionWidth} onChange={(e)=>setResolutionWidth(e.target.value.replace(/\D/g,""))} placeholder="e.g. 1080" />
               </div>
             </div>
 
-            <div className="two"><div><label>ACTUAL GAME FPS</label><select value={fps} onChange={e=>setFps(e.target.value)}><option value="30">30 FPS</option><option value="40">40 FPS</option><option value="60">Stable 60 FPS</option><option value="90">Stable 90 FPS</option><option value="120">Stable 120 FPS</option><option value="0">Unstable / unknown</option></select></div><div><label>TOUCH SAMPLING RATE</label><select value={touchRate} onChange={e=>setTouchRate(e.target.value)}><option value="60">60 Hz</option><option value="120">120 Hz</option><option value="180">180 Hz</option><option value="240">240 Hz</option><option value="360">360 Hz</option><option value="0">Unknown</option></select></div></div>
-            <label>FIRE BUTTON SIZE (%)</label><input value={fireButton} onChange={e=>setFireButton(e.target.value.replace(/\\D/g,""))}/>
+            <div className="two"><div><label>RESOLUTION HEIGHT</label><input value={resolutionHeight} onChange={e=>setResolutionHeight(e.target.value.replace(/\D/g,""))} placeholder="e.g. 2400"/></div><div><label>ACTUAL GAME FPS</label><select value={fps} onChange={e=>setFps(e.target.value)}><option value="30">30 FPS</option><option value="40">40 FPS</option><option value="60">Stable 60 FPS</option><option value="90">Stable 90 FPS</option><option value="120">Stable 120 FPS</option><option value="0">Unstable / unknown</option></select></div><div><label>TOUCH SAMPLING RATE</label><select value={touchRate} onChange={e=>setTouchRate(e.target.value)}><option value="">Unknown / not measured</option><option value="60">60 Hz</option><option value="120">120 Hz</option><option value="180">180 Hz</option><option value="240">240 Hz</option><option value="360">360 Hz</option><option value="0">Unknown</option></select></div></div>
+            <label>FIRE BUTTON SIZE (%)</label><input value={fireButton} onChange={e=>setFireButton(e.target.value.replace(/\D/g,""))}/>
             <label>AIM PRECISION</label><select value={aimPrecision} onChange={e=>setAimPrecision(e.target.value)}><option>Default</option><option>Precise on Scope</option><option>Full Control</option></select>
             <label>
               REFRESH RATE
@@ -965,13 +987,7 @@ function App() {
             </div>
 
             <div className="warning">
-              This is an optimized starting profile,
-              not a guaranteed universal perfect
-              setting. Touch response, FPS stability,
-              screen friction, latency and player
-              technique can change the result.
-              Calibration makes the profile more
-              personal.
+              Why these values? General controls camera movement and fast drag turns; Red Dot and 2× guide close-to-mid-range tracking; 4× and Sniper use lower values for finer corrections; Free Look controls camera look-around. Device size, pixel density, FPS stability, refresh/touch response, finger layout, fire-button size and your selected role/weapon adjust the starting profile. These are bounded estimates, not hidden Garena measurements. Test in Training Ground and change one slider at a time. India and MAX share core gunplay, so the game selector does not add an invented sensitivity offset.
             </div>
           </section>
         )}
