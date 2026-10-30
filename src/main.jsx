@@ -517,6 +517,10 @@ function getConfidence({
 }
 
 function App() {
+  const [game, setGame] = useState("Free Fire MAX");
+  const [loading, setLoading] = useState(false);
+  const [weaponMode, setWeaponMode] = useState("all");
+  const [selectedWeapons, setSelectedWeapons] = useState(["M1887 / Shotgun", "Desert Eagle", "MP40 / SMG", "AR", "AWM / Sniper"]);
   const [searchQuery, setSearchQuery] = useState("");
   const [device, setDevice] = useState(null);
   const [customDevice, setCustomDevice] = useState("");
@@ -568,7 +572,7 @@ function App() {
     return null;
   }
 
-  function generateSensitivity(nextCalibration = null) {
+  function calculateProfile(nextCalibration = null) {
     const selectedDevice = getSelectedDevice();
 
     const refreshNumber =
@@ -595,6 +599,14 @@ function App() {
     if (nextCalibration !== null) {
       setCalibration(nextCalibration);
     }
+  }
+
+  function generateSensitivity(nextCalibration = null) {
+    setLoading(true);
+    window.setTimeout(() => {
+      calculateProfile(nextCalibration);
+      setLoading(false);
+    }, 1450);
   }
 
   function reOptimize() {
@@ -721,10 +733,29 @@ function App() {
           </div>
         </section>
 
+        <section className="panel gamePanel">
+          <div>
+            <span className="eyebrow">01 / SELECT YOUR GAME</span>
+            <h2>Which version do you play?</h2>
+            <p className="sectionHint">Choose the game version before building your profile.</p>
+          </div>
+          <div className="gameChoices">
+            {["Free Fire India", "Free Fire MAX"].map((item) => (
+              <button type="button" key={item}
+                className={game === item ? "gameChoice selected" : "gameChoice"}
+                onClick={() => { setGame(item); setResult(null); }}>
+                <span className="gameIcon">✦</span>
+                <span><b>{item}</b><small>{item === "Free Fire India" ? "India version" : "Enhanced graphics version"}</small></span>
+                <i>{game === item ? "✓" : "+"}</i>
+              </button>
+            ))}
+          </div>
+        </section>
+
         <section className="grid">
           <div className="panel">
             <h2>
-              1. Device &amp; display
+              2. Device &amp; display
             </h2>
 
             <label>
@@ -794,6 +825,15 @@ function App() {
 
             <div className="two">
               <div>
+                <label>DISPLAY SIZE (INCHES)</label>
+                <input
+                  value={screenSize}
+                  onChange={(event) => setScreenSize(event.target.value.replace(/[^0-9.]/g, ""))}
+                  placeholder="e.g. 6.88"
+                  inputMode="decimal"
+                />
+              </div>
+              <div>
                 <label>
                   DPI{" "}
                   <small>
@@ -816,22 +856,8 @@ function App() {
               </div>
 
               <div>
-                <label>
-                  SCREEN{" "}
-                  <small>
-                    optional
-                  </small>
-                </label>
-
-                <input
-                  value={screenSize}
-                  onChange={(event) =>
-                    setScreenSize(
-                      event.target.value
-                    )
-                  }
-                  placeholder="e.g. 6.67"
-                />
+                <label>SCREEN RESOLUTION <small>optional</small></label>
+                <input placeholder="e.g. 1640 × 720" />
               </div>
             </div>
 
@@ -868,7 +894,7 @@ function App() {
 
           <div className="panel">
             <h2>
-              2. How you play
+              3. How you play
             </h2>
 
             <label>
@@ -894,25 +920,27 @@ function App() {
               ))}
             </div>
 
-            <label>
-              MAIN WEAPON / AIM STYLE
-            </label>
-
-            <select
-              value={weapon}
-              onChange={(event) =>
-                setWeapon(event.target.value)
-              }
-            >
-              {weapons.map((item) => (
-                <option
-                  key={item}
-                  value={item}
-                >
-                  {item}
-                </option>
-              ))}
-            </select>
+            <label>WEAPON SENSITIVITY</label>
+            <div className="weaponModes">
+              <button type="button" className={weaponMode === "all" ? "active" : ""} onClick={() => {setWeaponMode("all"); setWeapon("All weapons");}}>All weapons</button>
+              <button type="button" className={weaponMode === "individual" ? "active" : ""} onClick={() => setWeaponMode("individual")}>Choose weapons</button>
+            </div>
+            {weaponMode === "individual" && (
+              <div className="weaponGrid">
+                {weapons.filter((item) => item !== "All weapons").map((item) => (
+                  <label className="weaponCheck" key={item}>
+                    <input type="checkbox" checked={selectedWeapons.includes(item)}
+                      onChange={(event) => setSelectedWeapons((current) => event.target.checked ? [...current, item] : current.filter((x) => x !== item))} />
+                    {item}
+                  </label>
+                ))}
+              </div>
+            )}
+            {weaponMode === "individual" && (
+              <select value={weapon} onChange={(event) => setWeapon(event.target.value)}>
+                {selectedWeapons.map((item) => <option key={item} value={item}>{item}</option>)}
+              </select>
+            )}
 
             <label>
               FINGER SETUP
@@ -994,7 +1022,7 @@ function App() {
                 </span>
 
                 <h2>
-                  Near-Perfect Starting Profile
+                  Your {game} sensitivity profile
                 </h2>
 
                 <p>
@@ -1133,9 +1161,16 @@ function App() {
         )}
       </main>
 
+      {loading && (
+        <div className="loadingOverlay" role="status" aria-live="polite">
+          <div className="loaderCore"><div className="loaderRing"></div><span>SF</span></div>
+          <div className="loadingTitle">FORGING YOUR PROFILE</div>
+          <p>Analyzing device · Tuning control curves · Preparing settings</p>
+          <div className="loadingTrack"><i /></div>
+        </div>
+      )}
       <footer>
-        SensiForge AI · Local calculation · No
-        account required
+        SensiForge AI · On-device calculation · No account required
       </footer>
     </div>
   );
