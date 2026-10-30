@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
@@ -326,6 +326,31 @@ function getConfidence({
 function App() {
   const [game, setGame] = useState("Free Fire MAX");
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [showNinjaIntro, setShowNinjaIntro] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
+
+  useEffect(() => {
+    const seen = window.localStorage.getItem("sensiforge-ninja-intro-v1");
+    if (!seen) setShowNinjaIntro(true);
+    setIntroReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) { setLoadingStep(0); return; }
+    const stages = [1, 2, 3, 4];
+    let index = 0;
+    const id = window.setInterval(() => {
+      index = (index + 1) % stages.length;
+      setLoadingStep(stages[index]);
+    }, 620);
+    return () => window.clearInterval(id);
+  }, [loading]);
+
+  function dismissNinjaIntro() {
+    window.localStorage.setItem("sensiforge-ninja-intro-v1", "seen");
+    setShowNinjaIntro(false);
+  }
   const [weaponMode, setWeaponMode] = useState("all");
   const [selectedWeapons, setSelectedWeapons] = useState(["M1887 / Shotgun", "Desert Eagle", "MP40 / SMG", "AR", "AWM / Sniper"]);
   const [fps,setFps]=useState("60"); const [touchRate,setTouchRate]=useState("180"); const [resolutionWidth,setResolutionWidth]=useState("1080"); const [fireButton,setFireButton]=useState("50"); const [aimPrecision,setAimPrecision]=useState("Default"); const [testSlider,setTestSlider]=useState("General");
@@ -406,7 +431,7 @@ function App() {
     window.setTimeout(() => {
       calculateProfile(nextCalibration);
       setLoading(false);
-    }, 1450);
+    }, 3100);
   }
 
   function reOptimize() {
