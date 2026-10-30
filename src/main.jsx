@@ -348,15 +348,6 @@ function App() {
   const [game, setGame] = useState("Free Fire MAX");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-  const [showNinjaIntro, setShowNinjaIntro] = useState(false);
-  const [introReady, setIntroReady] = useState(false);
-
-  useEffect(() => {
-    const seen = window.localStorage.getItem("sensiforge-ninja-intro-v1");
-    if (!seen) setShowNinjaIntro(true);
-    setIntroReady(true);
-  }, []);
-
   useEffect(() => {
     if (!loading) { setLoadingStep(0); return; }
     const stages = [1, 2, 3, 4];
@@ -368,10 +359,6 @@ function App() {
     return () => window.clearInterval(id);
   }, [loading]);
 
-  function dismissNinjaIntro() {
-    window.localStorage.setItem("sensiforge-ninja-intro-v1", "seen");
-    setShowNinjaIntro(false);
-  }
   const [weaponMode, setWeaponMode] = useState("all");
   const [selectedWeapons, setSelectedWeapons] = useState(["M1887 / Shotgun", "Desert Eagle", "MP40 / SMG", "AR", "AWM / Sniper"]);
   const [fps,setFps]=useState("60"); const [touchRate,setTouchRate]=useState(""); const [resolutionWidth,setResolutionWidth]=useState("1080"); const [resolutionHeight,setResolutionHeight]=useState(""); const [fireButton,setFireButton]=useState("50"); const [aimPrecision,setAimPrecision]=useState("Default"); const [testSlider,setTestSlider]=useState("General");
@@ -993,71 +980,51 @@ function App() {
         )}
       </main>
 
-      {introReady && showNinjaIntro && (
-        <div className="ninjaIntro" role="dialog" aria-modal="true" aria-label="SensiForge entrance animation">
-          <div className="introGrain" />
-          <div className="introKicker">SENSIFORGE // SHADOW PROTOCOL</div>
-          <div className="ninjaStage">
-            <div className="slashTrail" /><svg className="inkLandscape" viewBox="0 0 520 300" aria-hidden="true">
-  <defs><linearGradient id="inkSky" x2="0" y2="1"><stop stopColor="#8d1118"/><stop offset=".55" stopColor="#c9bdb8"/><stop offset="1" stopColor="#777"/></linearGradient><filter id="inkBlur"><feGaussianBlur stdDeviation="8"/></filter></defs>
-  <rect width="520" height="300" fill="url(#inkSky)"/>
-  <circle cx="120" cy="88" r="25" fill="#e51e28"/>
-  <path d="M0 130 Q70 85 140 125 T280 120 T520 110 V190 H0Z" fill="#d5c9c4" opacity=".72" filter="url(#inkBlur)"/>
-  <path d="M0 198 L70 130 110 185 180 110 230 190 305 120 365 194 430 132 520 205 V300 H0Z" fill="#25272a"/>
-  <path d="M0 220 Q120 185 220 220 T520 205 V300 H0Z" fill="#777" opacity=".75"/>
-  <path d="M30 250 Q120 220 200 250 T390 240 T520 260 V300 H0Z" fill="#17191c"/>
-  <g fill="#101113" stroke="#101113" strokeWidth="7" strokeLinecap="round">
-   <path d="M85 195 V130 M55 145 H115 M65 130 L85 112 105 130 M62 155 H108 M72 166 H98 M70 195 H100"/>
-   <path d="M375 210 V150 M340 165 H410 M350 150 L375 130 400 150 M345 178 H405"/>
-   <path d="M255 210 L260 170 286 153 315 165 335 190 300 183 278 188 260 215Z"/>
-   <circle cx="284" cy="139" r="11"/>
-   <path d="M283 151 L255 178 M290 153 L322 169 M270 184 L246 211 M298 184 L320 211"/>
-  </g>
-  <path d="M0 282 Q120 255 230 278 T520 275" fill="none" stroke="#d5d0cc" strokeWidth="3" opacity=".3"/>
- </svg>
-            <svg className="stickNinja" viewBox="0 0 220 240" aria-hidden="true">
-              <g className="ninjaBody" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
-                <path d="M105 72 L104 139 M103 88 L61 119 L42 105 M107 88 L148 106 L172 77 M104 139 L72 188 L54 220 M106 139 L137 183 L163 213"/>
-              </g>
-              <g className="ninjaSword" fill="none" strokeLinecap="round"><path d="M173 75 L210 8" stroke="currentColor" strokeWidth="4"/><path d="M167 83 L181 68" stroke="currentColor" strokeWidth="7"/></g>
-              <path className="ninjaScarf" d="M83 68 Q48 66 24 82 Q49 78 70 91Z" fill="currentColor"/>
-            </svg>
-            <div className="impactRing" /><div className="introSlash">SHINK!</div>
-          </div>
-          <div className="introWordmark">NO PRESETS. <span>PURE CONTROL.</span></div>
-          <p className="introSub">A new challenger enters the forge.</p>
-          <button className="enterForge" type="button" onClick={dismissNinjaIntro}>ENTER THE FORGE <span>↗</span></button>
-          <div className="introFooter">SENSIFORGE AI <i>•</i> FREE FIRE SENSITIVITY LAB</div>
-        </div>
-      )}
       {loading && (
         <div className="loadingOverlay" role="status" aria-live="polite">
-          <div className="loadingNinjaStage">
-            <div className="loadingSlash" /><svg className="inkLandscape" viewBox="0 0 520 300" aria-hidden="true">
-  <defs><linearGradient id="inkSky" x2="0" y2="1"><stop stopColor="#8d1118"/><stop offset=".55" stopColor="#c9bdb8"/><stop offset="1" stopColor="#777"/></linearGradient><filter id="inkBlur"><feGaussianBlur stdDeviation="8"/></filter></defs>
-  <rect width="520" height="300" fill="url(#inkSky)"/>
-  <circle cx="120" cy="88" r="25" fill="#e51e28"/>
-  <path d="M0 130 Q70 85 140 125 T280 120 T520 110 V190 H0Z" fill="#d5c9c4" opacity=".72" filter="url(#inkBlur)"/>
-  <path d="M0 198 L70 130 110 185 180 110 230 190 305 120 365 194 430 132 520 205 V300 H0Z" fill="#25272a"/>
-  <path d="M0 220 Q120 185 220 220 T520 205 V300 H0Z" fill="#777" opacity=".75"/>
-  <path d="M30 250 Q120 220 200 250 T390 240 T520 260 V300 H0Z" fill="#17191c"/>
-  <g fill="#101113" stroke="#101113" strokeWidth="7" strokeLinecap="round">
-   <path d="M85 195 V130 M55 145 H115 M65 130 L85 112 105 130 M62 155 H108 M72 166 H98 M70 195 H100"/>
-   <path d="M375 210 V150 M340 165 H410 M350 150 L375 130 400 150 M345 178 H405"/>
-   <path d="M255 210 L260 170 286 153 315 165 335 190 300 183 278 188 260 215Z"/>
-   <circle cx="284" cy="139" r="11"/>
-   <path d="M283 151 L255 178 M290 153 L322 169 M270 184 L246 211 M298 184 L320 211"/>
-  </g>
-  <path d="M0 282 Q120 255 230 278 T520 275" fill="none" stroke="#d5d0cc" strokeWidth="3" opacity=".3"/>
- </svg>
-            <svg className="loadingNinja" viewBox="0 0 220 240" aria-hidden="true">
-              <g fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
-                <path d="M105 72 L104 139 M103 88 L61 119 L42 105 M107 88 L148 106 L172 77 M104 139 L72 188 L54 220 M106 139 L137 183 L163 213 M173 75 L210 8"/>
+          <div className="duelScene" aria-hidden="true">
+            <div className="duelMoon" />
+            <div className="duelMountain duelMountainBack" />
+            <div className="duelMountain duelMountainFront" />
+            <div className="duelGround" />
+            <div className="duelDust dustOne" /><div className="duelDust dustTwo" />
+            <svg className="duelFighter fighterLeft" viewBox="0 0 260 330">
+              <defs><linearGradient id="robeA" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#f1eee7"/><stop offset="1" stopColor="#77736d"/></linearGradient></defs>
+              <g stroke="#111" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M103 111 Q75 139 78 192 L53 258 Q93 281 143 260 L157 194 Q161 145 133 111Z" fill="url(#robeA)"/>
+                <path d="M91 133 L54 174 L30 217 M143 133 L179 157 L220 125" fill="none"/>
+                <path d="M79 252 L61 300 M140 255 L164 301" fill="none" strokeWidth="15"/>
+                <path d="M84 45 Q89 9 128 16 Q170 21 166 65 L146 104 L95 91Z" fill="#151515"/>
+                <path d="M91 70 Q124 58 157 73 L151 94 Q122 105 96 89Z" fill="#d6d0c4"/>
+                <path d="M99 110 L146 111" fill="none" stroke="#111" strokeWidth="5"/>
+                <path d="M181 157 L235 83" fill="none" stroke="#d9d5ce" strokeWidth="7"/>
+                <path d="M172 168 L190 145" fill="none" stroke="#111" strokeWidth="12"/>
+                <path d="M53 258 L35 275 M143 260 L160 278" fill="none" strokeWidth="10"/>
               </g>
+              <path d="M100 105 Q59 116 28 94 Q60 103 84 85Z" fill="#171717"/>
             </svg>
-            <div className="loadingImpact" />
+            <svg className="duelFighter fighterRight" viewBox="0 0 260 330">
+              <defs><linearGradient id="robeB" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#292a30"/><stop offset="1" stopColor="#050506"/></linearGradient></defs>
+              <g stroke="#050505" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M104 111 Q75 139 78 192 L53 258 Q93 281 143 260 L157 194 Q161 145 133 111Z" fill="url(#robeB)"/>
+                <path d="M91 133 L54 174 L30 217 M143 133 L179 157 L220 125" fill="none"/>
+                <path d="M79 252 L61 300 M140 255 L164 301" fill="none" strokeWidth="15"/>
+                <path d="M84 45 Q89 9 128 16 Q170 21 166 65 L146 104 L95 91Z" fill="#080809"/>
+                <path d="M91 70 Q124 58 157 73 L151 94 Q122 105 96 89Z" fill="#b7b4ad"/>
+                <path d="M99 110 L146 111" fill="none" stroke="#111" strokeWidth="5"/>
+                <path d="M181 157 L235 83" fill="none" stroke="#e9e3d9" strokeWidth="7"/>
+                <path d="M172 168 L190 145" fill="none" stroke="#111" strokeWidth="12"/>
+                <path d="M53 258 L35 275 M143 260 L160 278" fill="none" strokeWidth="10"/>
+              </g>
+              <path d="M100 105 Q59 116 28 94 Q60 103 84 85Z" fill="#09090a"/>
+            </svg>
+            <svg className="duelEffects" viewBox="0 0 900 440">
+              <path className="duelSlash slashRed" d="M360 178 Q450 70 548 175"/>
+              <path className="duelSlash slashWhite" d="M535 245 Q445 340 345 245"/>
+              <path className="duelClash" d="M410 184 L450 140 L490 184 L450 226Z"/>
+              <g className="duelSparks"><path d="M450 190l-48-42m48 42 52-58m-52 58 60 34m-60-34-55 49m55-49 5-72m-5 72-10 82"/></g>
+            </svg>
+            <div className="duelCaption">SHADOW DUEL <span>•</span> ROUND IN PROGRESS</div>
           </div>
           <div className="loadingTitle">FORGING YOUR PROFILE</div>
           <p>{["Reading device geometry","Mapping touch response","Tuning weapon control curves","Finalizing sensitivity profile"][Math.min(3,loadingStep)]}</p>
