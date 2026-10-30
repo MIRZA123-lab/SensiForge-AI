@@ -191,3 +191,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 @keyframes loadingSweep{0%{width:8%;transform:translateX(-20%)}50%{width:72%;transform:translateX(40%)}100%{width:18%;transform:translateX(500%)}}
 @media(max-width:520px){.duelScene{height:43vh;min-height:250px}.duelFighter{width:46%;height:72%}.fighterLeft{left:0}.fighterRight{right:0}.duelCaption{font-size:8px;letter-spacing:.2em}.loadingOverlay .loadingTitle{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.fighterLeft,.fighterRight,.duelSlash,.duelClash,.duelSparks,.duelDust,.duelMoon,.loadingTrack i{animation:none!important}}
+
+
+/* Cinematic metallic-red welcome typography */
+.welcomeAnime{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0 0 25px;overflow:hidden;}
+.welcomeLetters{display:flex;gap:clamp(1px,.65vw,7px);perspective:700px;}
+.welcomeLetters span{display:inline-block;font-size:clamp(34px,7vw,66px);font-weight:1000;line-height:1;letter-spacing:.015em;color:transparent;background:linear-gradient(180deg,#fff0ed 0%,#ff7770 17%,#a50916 39%,#f0443e 53%,#5b080e 74%,#ffaaa0 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:1px #ef7770;text-shadow:0 2px 0 #310307,0 5px 12px #000b,0 0 22px #c5162455;opacity:0;transform:translate3d(0,34px,-90px) rotateX(65deg) scale(.72);animation:welcomeMetalIn .72s cubic-bezier(.16,.8,.25,1.15) forwards;animation-delay:calc(var(--letter-index)*.105s);}
+.welcomeLetters span:nth-child(odd){transform-origin:50% 100%;}
+.welcomeSubline{font-size:9px;font-weight:900;letter-spacing:.48em;color:#c7a09d;text-shadow:0 0 12px #a10d19;opacity:0;animation:welcomeSubIn .7s ease forwards;animation-delay:.95s;}
+.welcomeAnime:after{content:"";height:2px;width:min(100%,390px);margin-top:5px;background:linear-gradient(90deg,transparent,#7d1019,#ff5c54,#f6d6cf,transparent);transform:scaleX(0);transform-origin:left;box-shadow:0 0 14px #db2635;animation:welcomeLine .9s ease-out forwards;animation-delay:.78s;}
+@keyframes welcomeMetalIn{0%{opacity:0;transform:translate3d(0,34px,-90px) rotateX(65deg) scale(.72);filter:blur(5px)}65%{opacity:1;transform:translate3d(0,-5px,0) rotateX(-8deg) scale(1.06);filter:blur(0)}100%{opacity:1;transform:translate3d(0,0,0) rotateX(0) scale(1);filter:drop-shadow(0 0 8px #d51b2b66)}}
+@keyframes welcomeSubIn{from{opacity:0;transform:translateX(-18px);letter-spacing:.8em}to{opacity:1;transform:translateX(0);letter-spacing:.48em}}
+@keyframes welcomeLine{to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.welcomeLetters span,.welcomeSubline,.welcomeAnime:after{animation:none!important;opacity:1;transform:none}}
