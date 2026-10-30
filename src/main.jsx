@@ -998,7 +998,23 @@ function App() {
           <div className="introGrain" />
           <div className="introKicker">SENSIFORGE // SHADOW PROTOCOL</div>
           <div className="ninjaStage">
-            <div className="slashTrail" />
+            <div className="slashTrail" /><svg className="inkLandscape" viewBox="0 0 520 300" aria-hidden="true">
+  <defs><linearGradient id="inkSky" x2="0" y2="1"><stop stopColor="#8d1118"/><stop offset=".55" stopColor="#c9bdb8"/><stop offset="1" stopColor="#777"/></linearGradient><filter id="inkBlur"><feGaussianBlur stdDeviation="8"/></filter></defs>
+  <rect width="520" height="300" fill="url(#inkSky)"/>
+  <circle cx="120" cy="88" r="25" fill="#e51e28"/>
+  <path d="M0 130 Q70 85 140 125 T280 120 T520 110 V190 H0Z" fill="#d5c9c4" opacity=".72" filter="url(#inkBlur)"/>
+  <path d="M0 198 L70 130 110 185 180 110 230 190 305 120 365 194 430 132 520 205 V300 H0Z" fill="#25272a"/>
+  <path d="M0 220 Q120 185 220 220 T520 205 V300 H0Z" fill="#777" opacity=".75"/>
+  <path d="M30 250 Q120 220 200 250 T390 240 T520 260 V300 H0Z" fill="#17191c"/>
+  <g fill="#101113" stroke="#101113" strokeWidth="7" strokeLinecap="round">
+   <path d="M85 195 V130 M55 145 H115 M65 130 L85 112 105 130 M62 155 H108 M72 166 H98 M70 195 H100"/>
+   <path d="M375 210 V150 M340 165 H410 M350 150 L375 130 400 150 M345 178 H405"/>
+   <path d="M255 210 L260 170 286 153 315 165 335 190 300 183 278 188 260 215Z"/>
+   <circle cx="284" cy="139" r="11"/>
+   <path d="M283 151 L255 178 M290 153 L322 169 M270 184 L246 211 M298 184 L320 211"/>
+  </g>
+  <path d="M0 282 Q120 255 230 278 T520 275" fill="none" stroke="#d5d0cc" strokeWidth="3" opacity=".3"/>
+ </svg>
             <svg className="stickNinja" viewBox="0 0 220 240" aria-hidden="true">
               <g className="ninjaBody" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
@@ -1018,7 +1034,23 @@ function App() {
       {loading && (
         <div className="loadingOverlay" role="status" aria-live="polite">
           <div className="loadingNinjaStage">
-            <div className="loadingSlash" />
+            <div className="loadingSlash" /><svg className="inkLandscape" viewBox="0 0 520 300" aria-hidden="true">
+  <defs><linearGradient id="inkSky" x2="0" y2="1"><stop stopColor="#8d1118"/><stop offset=".55" stopColor="#c9bdb8"/><stop offset="1" stopColor="#777"/></linearGradient><filter id="inkBlur"><feGaussianBlur stdDeviation="8"/></filter></defs>
+  <rect width="520" height="300" fill="url(#inkSky)"/>
+  <circle cx="120" cy="88" r="25" fill="#e51e28"/>
+  <path d="M0 130 Q70 85 140 125 T280 120 T520 110 V190 H0Z" fill="#d5c9c4" opacity=".72" filter="url(#inkBlur)"/>
+  <path d="M0 198 L70 130 110 185 180 110 230 190 305 120 365 194 430 132 520 205 V300 H0Z" fill="#25272a"/>
+  <path d="M0 220 Q120 185 220 220 T520 205 V300 H0Z" fill="#777" opacity=".75"/>
+  <path d="M30 250 Q120 220 200 250 T390 240 T520 260 V300 H0Z" fill="#17191c"/>
+  <g fill="#101113" stroke="#101113" strokeWidth="7" strokeLinecap="round">
+   <path d="M85 195 V130 M55 145 H115 M65 130 L85 112 105 130 M62 155 H108 M72 166 H98 M70 195 H100"/>
+   <path d="M375 210 V150 M340 165 H410 M350 150 L375 130 400 150 M345 178 H405"/>
+   <path d="M255 210 L260 170 286 153 315 165 335 190 300 183 278 188 260 215Z"/>
+   <circle cx="284" cy="139" r="11"/>
+   <path d="M283 151 L255 178 M290 153 L322 169 M270 184 L246 211 M298 184 L320 211"/>
+  </g>
+  <path d="M0 282 Q120 255 230 278 T520 275" fill="none" stroke="#d5d0cc" strokeWidth="3" opacity=".3"/>
+ </svg>
             <svg className="loadingNinja" viewBox="0 0 220 240" aria-hidden="true">
               <g fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="105" cy="48" r="22"/><path d="M83 42 Q105 22 128 43 L124 58 Q105 48 86 59Z" fill="currentColor" stroke="none"/><path d="M88 53 L122 53" stroke="#080808" strokeWidth="4"/>
