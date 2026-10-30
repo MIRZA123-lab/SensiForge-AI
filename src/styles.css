@@ -118,3 +118,76 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 .loadingTrack i{background:linear-gradient(90deg,#eee,#c91f2a,#eee);box-shadow:0 0 16px #d32a3288}
 @keyframes inkReveal{0%{opacity:0;transform:scale(1.12);filter:grayscale(1) blur(7px)}100%{opacity:.76;transform:scale(1);filter:grayscale(.82) contrast(1.18)}}
 @media(prefers-reduced-motion:reduce){.inkLandscape{animation:none!important}}
+
+
+
+/* Two-rival cinematic loading duel — shown only during calculation */
+.loadingOverlay{
+  z-index:9999;
+  background:radial-gradient(ellipse at 50% 38%,#29201d 0%,#100e0e 46%,#030303 100%);
+  overflow:hidden;
+  padding:18px 14px 26px;
+}
+.loadingOverlay:after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.13) 4px,transparent 5px),
+  radial-gradient(ellipse at center,transparent 35%,#000 100%);
+}
+.duelScene{
+  width:min(96vw,960px);height:min(58vh,480px);min-height:260px;position:relative;
+  overflow:hidden;isolation:isolate;border:1px solid rgba(226,213,190,.2);
+  border-radius:8px;background:linear-gradient(180deg,#b8a98c 0%,#71695e 47%,#252321 100%);
+  box-shadow:0 22px 80px #000b,0 0 50px #a23a251f;
+}
+.duelMoon{position:absolute;width:clamp(46px,8vw,86px);aspect-ratio:1;border-radius:50%;right:18%;top:12%;
+  background:#a93c2c;box-shadow:0 0 55px #c04a2b66;animation:moonPulse 4s ease-in-out infinite}
+.duelMountain{position:absolute;inset:auto 0 26% 0;height:48%;background:#383632;clip-path:polygon(0 85%,12% 40%,21% 73%,34% 18%,48% 78%,61% 28%,75% 77%,88% 35%,100% 70%,100% 100%,0 100%);opacity:.62}
+.duelMountainFront{height:31%;bottom:20%;background:#171717;opacity:.75;transform:scaleX(-1)}
+.duelGround{position:absolute;left:-10%;right:-10%;bottom:-20%;height:46%;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at 50% 0%,#a99c84 0%,#5b554b 44%,#171615 100%)}
+.duelGround:after{content:"";position:absolute;inset:0;opacity:.25;background:repeating-linear-gradient(168deg,transparent 0 22px,#d7cbb3 23px,transparent 24px 42px)}
+.duelFighter{position:absolute;width:clamp(130px,25vw,260px);height:78%;bottom:8%;z-index:3;filter:drop-shadow(0 14px 8px #0008)}
+.fighterLeft{left:12%;transform-origin:55% 85%;animation:fighterLCombat 2.8s cubic-bezier(.45,0,.25,1) infinite}
+.fighterRight{right:10%;transform-origin:45% 85%;animation:fighterRCombat 2.8s cubic-bezier(.45,0,.25,1) infinite}
+.duelEffects{position:absolute;inset:0;width:100%;height:100%;z-index:4;overflow:visible}
+.duelSlash{fill:none;stroke-linecap:round;stroke-width:9;stroke-dasharray:260;stroke-dashoffset:260;filter:drop-shadow(0 0 8px currentColor)}
+.slashRed{stroke:#d34a35;animation:duelSlashA 2.8s ease-in-out infinite}
+.slashWhite{stroke:#f4ead7;stroke-width:6;animation:duelSlashB 2.8s ease-in-out infinite}
+.duelClash{fill:none;stroke:#fff0d4;stroke-width:3;opacity:0;transform-origin:50% 50%;animation:duelClash 2.8s ease-out infinite}
+.duelSparks{stroke:#f7e4bc;stroke-width:3;stroke-linecap:round;opacity:0;transform-origin:50% 50%;animation:duelSparks 2.8s ease-out infinite}
+.duelDust{position:absolute;z-index:2;bottom:14%;width:24%;height:14%;border-radius:50%;background:#d7c8aa;filter:blur(13px);opacity:0}
+.dustOne{left:20%;animation:dustBurst 2.8s ease-out infinite}
+.dustTwo{right:18%;animation:dustBurst 2.8s ease-out .3s infinite}
+.duelCaption{position:absolute;z-index:5;bottom:13px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.32em;color:#f1e8d9;text-shadow:0 2px 8px #000;font-weight:800}
+.duelCaption span{color:#d44b39;padding:0 8px}
+.loadingOverlay .loadingTitle{position:relative;z-index:2;margin-top:22px;font-size:14px;letter-spacing:.3em;color:#f4eee4;font-weight:900}
+.loadingOverlay p{position:relative;z-index:2;color:#c8bca9;font-size:12px;letter-spacing:.12em;margin:9px 0 17px;min-height:18px}
+.loadingTrack{position:relative;z-index:2;width:min(78vw,420px);height:4px;background:#ffffff24;border-radius:20px;overflow:hidden}
+.loadingTrack i{display:block;height:100%;background:linear-gradient(90deg,#8d201c,#f1e2c5,#bd3329);box-shadow:0 0 15px #df4a36;animation:loadingSweep 2.2s ease-in-out infinite}
+.loadingMicro{position:relative;z-index:2;color:#8c8174;font-size:9px;letter-spacing:.28em;margin-top:13px}
+@keyframes fighterLCombat{
+  0%,12%,100%{transform:translate(0,0) rotate(-3deg)}
+  20%{transform:translate(18%, -3%) rotate(13deg)}
+  29%{transform:translate(30%,-10%) rotate(24deg)}
+  38%{transform:translate(13%,-2%) rotate(-10deg)}
+  53%{transform:translate(-5%,-13%) rotate(-22deg)}
+  67%{transform:translate(4%,0) rotate(5deg)}
+  82%{transform:translate(24%,-7%) rotate(17deg)}
+}
+@keyframes fighterRCombat{
+  0%,12%,100%{transform:translate(0,0) scaleX(-1) rotate(3deg)}
+  20%{transform:translate(-12%,-12%) scaleX(-1) rotate(-20deg)}
+  29%{transform:translate(-28%,-5%) scaleX(-1) rotate(-8deg)}
+  38%{transform:translate(-12%,-12%) scaleX(-1) rotate(-18deg)}
+  53%{transform:translate(-28%,0) scaleX(-1) rotate(18deg)}
+  67%{transform:translate(-4%,-7%) scaleX(-1) rotate(-5deg)}
+  82%{transform:translate(-22%,-12%) scaleX(-1) rotate(-20deg)}
+}
+@keyframes duelSlashA{0%,18%,100%{stroke-dashoffset:260;opacity:0}25%,34%{stroke-dashoffset:0;opacity:1}42%{stroke-dashoffset:-260;opacity:0}}
+@keyframes duelSlashB{0%,42%,100%{stroke-dashoffset:260;opacity:0}50%,59%{stroke-dashoffset:0;opacity:1}68%{stroke-dashoffset:-260;opacity:0}}
+@keyframes duelClash{0%,27%,100%{opacity:0;transform:scale(.2) rotate(0)}31%{opacity:1;transform:scale(1.5) rotate(45deg)}37%{opacity:0;transform:scale(2.5) rotate(90deg)}}
+@keyframes duelSparks{0%,29%,100%{opacity:0;transform:scale(.2) rotate(0)}32%{opacity:1;transform:scale(1) rotate(18deg)}39%{opacity:0;transform:scale(1.8) rotate(55deg)}}
+@keyframes dustBurst{0%,25%,100%{opacity:0;transform:scale(.4) translateY(0)}33%{opacity:.55;transform:scale(1.6) translateY(-20px)}48%{opacity:0;transform:scale(2.2) translateY(-35px)}}
+@keyframes moonPulse{0%,100%{box-shadow:0 0 35px #c04a2b44}50%{box-shadow:0 0 70px #c04a2b99}}
+@keyframes loadingSweep{0%{width:8%;transform:translateX(-20%)}50%{width:72%;transform:translateX(40%)}100%{width:18%;transform:translateX(500%)}}
+@media(max-width:520px){.duelScene{height:43vh;min-height:250px}.duelFighter{width:46%;height:72%}.fighterLeft{left:0}.fighterRight{right:0}.duelCaption{font-size:8px;letter-spacing:.2em}.loadingOverlay .loadingTitle{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.fighterLeft,.fighterRight,.duelSlash,.duelClash,.duelSparks,.duelDust,.duelMoon,.loadingTrack i{animation:none!important}}
